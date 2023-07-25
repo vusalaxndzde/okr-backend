@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -23,17 +22,16 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-                .cors(cors -> cors.disable())
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers("/demo", "/auth/**").permitAll()
-//                        .requestMatchers("/demo2", "/reset-pwd-email").hasRole("USER")
-////                        .requestMatchers("/users/**").hasRole("USER")
-//                        .requestMatchers(HttpMethod.PUT, "/workspaces/**").hasRole("ADMIN") //+
-//                        .requestMatchers(HttpMethod.POST, "/workspaces").hasRole("LEADER") //+
-//                        .requestMatchers("/workspaces/**").hasRole("USER") //+
-//                        .requestMatchers(HttpMethod.GET, "/organizations/**").hasRole("USER") //+
-//                        .requestMatchers("/organizations/**").hasRole("ADMIN") //+
+                        .requestMatchers("/demo", "/auth/**").permitAll()
+                        .requestMatchers("/demo2", "/reset-pwd-email").hasRole("USER")
+                        .requestMatchers("/users/**").hasRole("USER")
+                        .requestMatchers(HttpMethod.PUT, "/workspaces/**").hasRole("ADMIN") //+
+                        .requestMatchers(HttpMethod.POST, "/workspaces").hasRole("LEADER") //+
+                        .requestMatchers("/workspaces/**").hasRole("USER") //+
+                        .requestMatchers(HttpMethod.GET, "/organizations/**").hasRole("USER") //+
+                        .requestMatchers("/organizations/**").hasRole("ADMIN") //+
                         .anyRequest().permitAll()
                 )
                 .sessionManagement(sess -> sess
@@ -41,8 +39,6 @@ public class SecurityConfig {
 
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
-//        httpSecurity.httpBasic(Customizer.withDefaults());
 
         return httpSecurity.build();
     }
